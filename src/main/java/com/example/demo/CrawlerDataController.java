@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*") // 允许所有来源访问，解决跨域问题
+@RestController
+@RequestMapping("/api/data")
+public class CrawlerDataController { ... }
 @RestController // 声明这是一个 RESTful Controller
 @RequestMapping("/api/data") // 基础路由
 public class CrawlerDataController {
