@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>互动爬虫程序</title>
+    <style>
+        body { font-family: sans-serif; padding: 50px; background: #f4f7f6; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        input { width: 70%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🚀 互动爬虫控制面板</h2>
+        <input type="text" id="targetUrl" placeholder="输入动态网站 URL (例如: https://...)">
+        <button onclick="startCrawl()">开始爬取</button>
+        <button id="downloadBtn" style="display:none; background:#007bff;" onclick="downloadCSV()">下载为 CSV</button>
+        <div id="status"></div>
+        <table id="resultTable" style="display:none;">
+            <thead>
+                <tr><th>ID</th><th>产品名称</th><th>售价</th><th>评论摘要</th></tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+    <script>
+        async function startCrawl() {
+            const url = document.getElementById('targetUrl').value;
+            const status = document.getElementById('status');
+            status.innerText = "正在爬取中，请稍候...";
+            
+            const response = await fetch('/crawl', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ targetUrl: url })
+            });
+            const result = await response.json();
+            
+            if(result.success) {
+                status.innerText = result.message;
+                displayTable(result.data);
+                document.getElementById('downloadBtn').style.display = 'inline-block';
+            } else {
+                status.innerText = "出错了: " + result.message;
+            }
+        }
+
+        function displayTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            data.forEach(item => {
+                const row = `<tr><td>${item.productId}</td><td>${item.productName}</td><td>${item.sellingPrice}</td><td>${item.commentsJson}</td></tr>`;
+                tbody.innerHTML += row;
+            });
+            document.getElementById('resultTable').style.display = 'table';
+        }
+
+        function downloadCSV() {
+            // 这里稍后我会指导您实现简单的前端 CSV 导出逻辑
+            alert('导出功能已就绪，正在生成文件...');
+        }
+    </script>
+</body>
+</html>

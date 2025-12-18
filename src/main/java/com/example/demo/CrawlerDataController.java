@@ -1,34 +1,24 @@
-package com.example.demo; // 确保使用您的实际包名
+package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
-@CrossOrigin(origins = "*") // 允许所有来源访问，解决跨域问题
 @RestController
 @RequestMapping("/api/data")
-public class CrawlerDataController { ... }
-@RestController // 声明这是一个 RESTful Controller
-@RequestMapping("/api/data") // 基础路由
+@CrossOrigin(origins = "*")
 public class CrawlerDataController {
 
-    @Autowired // 自动注入 Repository 接口实例
+    @Autowired
     private CrawlerDataRepository repository;
 
-    // 1. 接收爬虫数据的 POST 接口
     @PostMapping
-    public ResponseEntity<List<CrawlerData>> saveCrawlerData(@RequestBody List<CrawlerData> dataList) {
-        // 使用 Repository 的 saveAll 批量保存数据
-        List<CrawlerData> savedData = repository.saveAll(dataList);
-        // 返回保存成功的数据列表和 HTTP 200 OK 状态
-        return ResponseEntity.ok(savedData);
+    public List<CrawlerData> saveAll(@RequestBody List<CrawlerData> data) {
+        return repository.saveAll(data);
     }
 
-    // 2. 查询所有数据的 GET 接口
     @GetMapping
-    public List<CrawlerData> getAllData() {
+    public List<CrawlerData> getAll() {
         return repository.findAll();
     }
 }

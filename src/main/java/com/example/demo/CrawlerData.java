@@ -1,37 +1,57 @@
-package com.example.demo; // 确保使用您的实际包名
+package com.example.demo;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
 
 @Entity
 public class CrawlerData {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 数据库主键
+    private Long id;
 
-    private String productId;       // 产品 ID
-    private String productName;     // 商品名称
-    private String sellingPrice;    // 售价
-    private String commentsJson;    // 10个以内的评论，存储为 JSON 字符串
-    private String sourceUrl;       // 数据来源 URL
+    // 使用 TEXT 类型以确保能存下豆瓣或乐天的超长标题
+    @Column(columnDefinition = "TEXT")
+    private String title;
 
-    // 默认构造函数是 JPA 要求的
-    public CrawlerData() {}
+    // 同理，value 也设置为 TEXT 类型，防止评分或描述过长
+    @Column(columnDefinition = "TEXT")
+    private String value;
 
-    // Getter 和 Setter 方法 (JPA 推荐)
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getProductId() { return productId; }
-    public void setProductId(String productId) { this.productId = productId; }
-    public String getProductName() { return productName; }
-    public void setProductName(String productName) { this.productName = productName; }
-    public String getSellingPrice() { return sellingPrice; }
-    public void setSellingPrice(String sellingPrice) { this.sellingPrice = sellingPrice; }
-    public String getCommentsJson() { return commentsJson; }
-    public void setCommentsJson(String commentsJson) { this.commentsJson = commentsJson; }
-    public String getSourceUrl() { return sourceUrl; }
-    public void setSourceUrl(String sourceUrl) { this.sourceUrl = sourceUrl; }
+    // 无参数构造函数（JPA 必须）
+    public CrawlerData() {
+    }
+
+    // 全参数构造函数（方便调试）
+    public CrawlerData(String title, String value) {
+        this.title = title;
+        this.value = value;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }
